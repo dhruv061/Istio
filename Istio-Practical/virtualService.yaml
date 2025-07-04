@@ -1,0 +1,21 @@
+# 5. VirtualService to split traffic
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: web
+  namespace: dhruv
+spec:
+  hosts:
+    - "dhruv.game.webdevprojects.cloud"
+  gateways:
+    - dhruv-gateway
+  http:
+    - route:
+        - destination:
+            host: web
+            subset: v1
+          weight: 50
+        - destination:
+            host: web
+            subset: v2
+          weight: 50

@@ -1,0 +1,13 @@
+# 3. Common Service (for Istio and ALB target)
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  namespace: dhruv
+spec:
+  selector:
+    app: web
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80

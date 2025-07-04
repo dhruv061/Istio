@@ -1,0 +1,50 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: alb-to-istio
+  namespace: istio-system
+  annotations:
+    # Name of the ALB to be created (or reused if it exists)
+    alb.ingress.kubernetes.io/load-balancer-name: dhru-alb
+
+    # Makes the ALB publicly accessible (internet-facing)
+    alb.ingress.kubernetes.io/scheme: internet-facing
+
+    # Target type is IP (used to directly call Kubenretes service)
+    alb.ingress.kubernetes.io/target-type: ip
+
+    # Tells ALB to forward traffic to backend using HTTP
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+
+    # Instructs ALB to listen on both HTTP (80) and HTTPS (443)
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+
+    # ACM certificate ARN used for HTTPS traffic on port 443
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-south-1:471112882549:certificate/736252bc-0739-4cd9-ac80-798678480949
+
+    # Automatically redirect HTTP requests to HTTPS (301 redirect)
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+
+    # # Path ALB uses to perform health checks (must return HTTP 200)
+    # alb.ingress.kubernetes.io/healthcheck-path: "/healthz/ready"
+
+    # alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+
+    # # Port on which ALB sends health check requests
+    # alb.ingress.kubernetes.io/healthcheck-port: '30849'
+
+    # Drop invalid/malformed headers at the ALB level before reaching backend
+    alb.ingress.kubernetes.io/load-balancer-attributes: routing.http.drop_invalid_header_fields.enabled=true
+spec:
+  ingressClassName: alb
+  rules:
+    - host: dhruv.game.webdevprojects.cloud
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: istio-ingressgateway
+                port:
+                  number: 80

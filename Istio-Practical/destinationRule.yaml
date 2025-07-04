@@ -1,0 +1,15 @@
+# 4. DestinationRule for Istio subsets
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: web
+  namespace: dhruv
+spec:
+  host: web #service name
+  subsets:
+    - name: v1
+      labels:
+        version: v1
+    - name: v2
+      labels:
+        version: v2

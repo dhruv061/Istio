@@ -1,0 +1,18 @@
+# 6. Istio Gateway (Passthrough TLS)
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: dhruv-gateway
+  namespace: dhruv
+spec:
+  #links your Gateway to the istio-ingressgateway Deployment.
+  #Even though the Gateway resource is in dhruv NS, Istio aggregates config from all namespaces — so it works.
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "dhruv.game.webdevprojects.cloud"
