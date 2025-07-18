@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: istio-system
+  name: alb-to-istio
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/load-balancer-name: bjp-alb
+    alb.ingress.kubernetes.io/group.name: "js-bjp-strapi"
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/load-balancer-attributes: idle_timeout.timeout_seconds=600
+    alb.ingress.kubernetes.io/backend-protocol: HTTP
+    alb.ingress.kubernetes.io/security-groups: sg-0fb8b09720cb0cee8
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-south-1:649024131700:certificate/2b065b60-ac45-49b8-ae4c-5adfe2bf6740
+    alb.ingress.kubernetes.io/subnets: subnet-0429f8a376bc4f945, subnet-05b5da3dbdfac6602
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: >
+      {"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_302" }}
+spec:
+  rules:
+    - host: bjp.game.webdevprojects.cloud
+      http:
+        paths:
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: ssl-redirect
+                port:
+                  name: use-annotation
+          - path: /*
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: istio-ingressgateway
+                port:
+                  number: 80
