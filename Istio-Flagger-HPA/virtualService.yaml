@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: web
+  namespace: bjp
+spec:
+  hosts:
+    - "bjp.game.webdevprojects.cloud"
+  gateways:
+    - "bjp-gateway"
+  http:
+    - route:
+        - destination:
+            host: web
+            port: 
+              number: 80
+        #     subset: v1
+        #   weight: 50
+        # - destination:
+        #     host: web
+        #     subset: v2
+        #   weight: 50

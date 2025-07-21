@@ -1,0 +1,28 @@
+apiVersion: flagger.app/v1beta1
+kind: Canary
+metadata:
+  name: web
+  namespace: bjp
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web
+  #HPA
+  autoscalerRef:
+    apiVersion: autoscaling/v2
+    kind: HorizontalPodAutoscaler
+    name: web-hpa
+  service:
+    port: 80
+    targetPort: 80
+    gateways:
+      - bjp-gateway
+    hosts:
+      - "bjp.game.webdevprojects.cloud"
+
+  analysis:
+    interval: 1m                   # ← check every 2 minutes
+    threshold: 1                   # ← allow 1 failure before rollback
+    maxWeight: 100                  # ← max traffic to canary before promoting
+    stepWeight: 30                 # ← shift 10% each interval
