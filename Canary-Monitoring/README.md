@@ -48,6 +48,6 @@ These metrics are scraped from the **Flagger pod**, which by default exposes its
 --
 ## 🖼️ Dashboard Preview
 
-![ Grafana Dashboard Preview ](/Canary-Monitoring/.images/Canary-Deployment-Flagger-1.png)
-![ Grafana Dashboard Preview ](/Canary-Monitoring/.images/Request-CPU-1.png)
-![ Grafana Dashboard Preview ](/Canary-Monitoring/.images/Request-CPU-2.png)
+![ Grafana Dashboard Preview ](.images/Canary-Deployment-Flagger-1.png)
+![ Grafana Dashboard Preview ](.images/Request-CPU-1.png)
+![ Grafana Dashboard Preview ](.images/Request-CPU-2.png)
